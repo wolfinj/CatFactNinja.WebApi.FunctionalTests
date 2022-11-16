@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<commonFolder>$(MSBuildProjectDirectory)\..\..\src\common</commonFolder>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0-preview.7.22375.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0-preview.7.22375.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0-preview.7.22375.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220726-02" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.0-alpha-net7.4" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="RestSharp" Version="108.0.2-alpha.0.6" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Update="Properties\AssemblyInfo.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>AssemblyInfo.cs</LastGenOutput>
+		</None>
+		<None Update="Properties\SharedGenericInfo.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>SharedGenericInfo.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Compile Update="Properties\AssemblyInfo.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>AssemblyInfo.tt</DependentUpon>
+		</Compile>
+		<Compile Update="Properties\SharedGenericInfo.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SharedGenericInfo.tt</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Interfaces" />
+	</ItemGroup>
+	
+
+</Project>

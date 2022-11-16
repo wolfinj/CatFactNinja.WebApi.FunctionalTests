@@ -1,0 +1,16 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension="cs" #>
+<#@ import namespace="System.IO"#>
+<#@ include file="$(commonFolder)\SharedGenericInfo.tt" #>
+
+<#
+    string T4TemplatePath = Path.GetDirectoryName(Host.TemplateFile);
+	File.WriteAllText(T4TemplatePath + "\\..\\..\\..\\src\\common\\SharedGenericInfo.cs", this.GenerationEnvironment.ToString());
+    this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+#>
+using System.Reflection;
+
+[assembly: AssemblyTitle("Lvp.Kdv.UserActivities.WebApp.PerformanceTests")]
+[assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("1.0")] 
+[assembly: AssemblyFileVersion("1.0.0.0")] 
