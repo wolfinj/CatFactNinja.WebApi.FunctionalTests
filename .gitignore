@@ -644,3 +644,4 @@ coverage*[.json, .xml, .info]
 /.idea/.idea.ABCsoft.CatFactNinja.WebAPI.TestLearningTask/.idea/.name
 /.idea/.idea.ABCsoft.CatFactNinja.WebAPI.TestLearningTask/.idea/indexLayout.xml
 /.idea/.idea.ABCsoft.CatFactNinja.WebAPI.TestLearningTask/.idea/vcs.xml
+/.idea/.idea.ABCsoft.CatFactNinja.WebAPI.TestLearningTask/.idea/git_toolbox_prj.xml

@@ -12,12 +12,14 @@ namespace ABCsoft.CatFactNinja.WebAPI.TestLearningTask;
 
 public class ApiTests
 {
-    private TestSettings Settings;
+    private TestSettings _settings;
+    private RestClient _client;
 
     [SetUp]
     public void Setup()
     {
-        Settings = new TestSettings();
+        _settings = new TestSettings();
+        _client = new RestClient(_settings.WebApiUrl);
     }
 
     #region FactTests
@@ -28,11 +30,10 @@ public class ApiTests
     public void WebApiGet_GetFactNoParameters_ExpectHttpOkResponse()
     {
         // Arrange
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathFact);
+        RestRequest request = new RestRequest(_settings.PathFact);
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -47,12 +48,11 @@ public class ApiTests
         // Arrange
         var maxLenght = 20;
 
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathFact);
-        request.AddQueryParameter(Settings.MaxLenghtParameter, maxLenght);
+        RestRequest request = new RestRequest(_settings.PathFact);
+        request.AddQueryParameter(_settings.MaxLenghtParameter, maxLenght);
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
         var fact = JsonSerializer.Deserialize<CatFact>(act.Content);
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -68,12 +68,11 @@ public class ApiTests
         // Arrange
         var maxLenght = 0;
 
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathFact);
-        request.AddQueryParameter(Settings.MaxLenghtParameter, maxLenght);
+        RestRequest request = new RestRequest(_settings.PathFact);
+        request.AddQueryParameter(_settings.MaxLenghtParameter, maxLenght);
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
         var fact = JsonSerializer.Deserialize<CatFact>(act.Content);
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -91,11 +90,10 @@ public class ApiTests
     public void WebApiGet_GetFactsNoParameters_ExpectHttpOkResponse()
     {
         // Arrange
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathFacts);
+        RestRequest request = new RestRequest(_settings.PathFacts);
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -112,17 +110,34 @@ public class ApiTests
     public void WebApiGet_GetFactsWithDifferentLimitParameters_GetExpectedFactCount(int itemCount)
     {
         // Arrange
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathFacts);
+        RestRequest request = new RestRequest(_settings.PathFacts);
         request.AddQueryParameter("limit", itemCount);
+
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
         var facts = JsonSerializer.Deserialize<CatFactsResponse>(act.Content);
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
         act.Content.Should().NotBeNullOrEmpty();
         facts.data.Count.Should().Be(itemCount);
+    }
+
+    [Test,
+     Category("GetFacts"),
+     Description("Call get fact endpoint with 0 limit")]
+    public void WebApiGet_GetFactsWithLimitParameterSetToZero_GetInternalServerError()
+    {
+        // Arrange
+        RestRequest request = new RestRequest(_settings.PathFacts);
+        request.AddQueryParameter("limit", 0);
+
+        // Act 
+        var act = _client.Execute(request);
+        var facts = JsonSerializer.Deserialize<CatFactsResponse>(act.Content);
+
+        // Assert
+        act.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
 
     [Test,
@@ -136,13 +151,12 @@ public class ApiTests
     {
         // Arrange
         var itemCount = 10;
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathFacts);
+        RestRequest request = new RestRequest(_settings.PathFacts);
         request.AddQueryParameter("limit", itemCount);
         request.AddQueryParameter("max_length", maxLenght);
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
 
         // JsonSerializerSettings jSettings = new JsonSerializerSettings
         // {
@@ -168,11 +182,10 @@ public class ApiTests
     public void WebApiGet_GetBreedsNoParameters_ExpectHttpOkResponse()
     {
         // Arrange
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathBreeds);
+        RestRequest request = new RestRequest(_settings.PathBreeds);
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -189,10 +202,8 @@ public class ApiTests
     public void WebApiGet_GetBreedsWithDifferentLimitParameters_GetExpectedBreedCount(int limit)
     {
         // Arrange
-        var client = new RestClient(Settings.WebApiUrl);
-        RestRequest request = new RestRequest(Settings.PathBreeds);
+        RestRequest request = new RestRequest(_settings.PathBreeds);
         request.AddQueryParameter("limit", limit);
-
 
         var jOptions = new JsonSerializerOptions
         {
@@ -201,9 +212,8 @@ public class ApiTests
         };
 
         // Act 
-        var act = client.Execute(request);
+        var act = _client.Execute(request);
         var breeds = JsonSerializer.Deserialize<CatBreedsResponse>(act.Content, jOptions);
-
 
         // Assert
         act.StatusCode.Should().Be(HttpStatusCode.OK);
