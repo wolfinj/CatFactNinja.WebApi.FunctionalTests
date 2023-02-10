@@ -10,7 +10,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ABCsoft.CatFactNinja.WebAPI.TestLearningTask;
 
-public class ApiTests
+public class ApiTestsRefit
 {
     private TestSettings _settings;
     private RestClient _client;
@@ -103,7 +103,7 @@ public class ApiTests
 
     [Test,
      Category("GetFacts"),
-     Description("Call get fact endpoint with limit parameter")]
+     Description("Call get fact endpoint limit parameter")]
     [TestCase(1)]
     [TestCase(5)]
     [TestCase(100)]
@@ -196,7 +196,7 @@ public class ApiTests
 
     [Test,
      Category("GetBreeds"),
-     Description("Call get breeds endpoint no parameters")]
+     Description("Call get breeds endpoint with limit parameter")]
     [TestCase(1)]
     [TestCase(10)]
     [TestCase(20)]
